@@ -1,39 +1,321 @@
-#Introduction to Trees
-In the world of data structures and algorithms, understanding binary trees lays the groundwork for hierarchical organisation and efficient data manipulation.
-Up until now, we have studied array, linked list, stack, and queues which are the fundamental linear data structures. Binary Trees are a different data structure and allow hierarchical organisation and structure of multi-level sequences. This resembles a tree with branching at each node expanding the tree in a non-linear fashion.
+# Introduction to Trees
 
-Binary Tree: A fundamental hierarchical data structure in computer science that comprises nodes arranged in a tree-like structure. It consists of nodes, where each node can have at most two children nodes, known as the left child and the right child.
+In the world of data structures and algorithms, understanding binary trees lays the groundwork for hierarchical organization and efficient data manipulation. Up until now, we have studied arrays, linked lists, stacks, and queues—fundamental linear data structures. **Binary trees** are a fundamentally different data structure that enables hierarchical organization and efficient data access patterns.
 
-Nodes: Each node in a binary tree contains a piece of data, often referred to as the node’s value or key. This node also contains references and pointers to its left and right children so that we can traverse from one node to another in a hierarchical order.
+---
 
-Root Node: The topmost node of a binary tree from which all other nodes stem out. This serves as the entry point for traversing the tree structure.
+## What is a Binary Tree?
 
-Children Nodes
-Nodes directly connected to a parent node. In a binary tree, a parent node can have zero, one, or two children nodes, each situated to the left or right of the parent node.
-Leaf Nodes: Nodes that do not have any children. These nodes lie on the outermost ends of the tree branches and are the terminal points of the traversal.
+**Binary Tree:** A fundamental hierarchical data structure in computer science that comprises **nodes** arranged in a tree-like structure. Each node can have **at most two children** (left and right), creating a branching structure that differs from linear data structures.
 
-Ancestors
-Nodes that lie on the path from a particular node to the root node. They are the nodes encountered while moving upwards from a specific node through its parent nodes until reaching the root of the tree.
+### Basic Node Structure (Java)
 
-Full Binary Tree: Also known as a Strict Binary Tree, where every node has either zero or two children. No node of this tree has just a single child; all internal nodes have exactly two children or no children if they are leaf nodes.
-The property that each node has either 2 or 0 children contributes significantly to the tree’s balance, making traversal, searching, and insertion options more predictable and efficient. The emphasis on having exactly two children optimises space utilisation and makes the tree more balanced.
+```java
+class TreeNode {
+    int data;                  // Value/key stored in the node
+    TreeNode left;             // Reference to left child
+    TreeNode right;            // Reference to right child
+    
+    TreeNode(int data) {
+        this.data = data;
+        this.left = null;
+        this.right = null;
+    }
+}
+```
 
-Complete Binary Tree: A specialised form of Binary Tree where all levels are filled completely except possibly the last level, which is filled from left to right. All levels of the tree, except possibly the last one, are fully filled. If the last level is not completely filled, it is filled from left to right, ensuring that nodes are positioned as far left as possible.
-In a complete binary tree, all leaf nodes are in the last level or the second-to-last level, and they are positioned towards the leftmost side.
+---
 
-This structure is particularly useful for storing data in structures like heaps, where efficient access to the top element (root) or certain properties (e.g., maximum or minimum values in a heap) is crucial. The completeness property aids in achieving balanced structures, making it easier to implement algorithms and ensuring reasonably consistent performance.
-Although it might seem similar to a full binary tree, a complete binary tree doesn't require all nodes to have two children; it's about the positioning and arrangement of nodes.
+## Key Terminologies
 
+### **Nodes**
+Each node in a binary tree contains:
+- **Data/Value:** The information stored in the node
+- **Left pointer:** Reference to the left child node
+- **Right pointer:** Reference to the right child node
 
-Perfect Binary Tree: A type of Binary Tree where all leaf nodes are at the same level and the number of leaf nodes is maximised for that level. Every node in a perfect binary tree has either zero or two children. This means that every internal node (non-leaf node) has exactly two children and all leaf nodes are at the same level.
-All levels of this tree are fully filled with nodes including the last level. Perfect Binary Trees have a balanced structure that maximises the number of nodes for a given height, creating a dense structure where the number of nodes doubles as we move down each level of the tree.
+### **Root Node**
+- The **topmost node** of the binary tree from which all other nodes stem
+- Serves as the **entry point** for traversing the tree structure
+- Every tree has exactly one root node
 
-Properties of perfect binary trees make them efficient for certain operations like searching and sorting due to their balanced nature. However, achieving and maintaining perfect balance, especially when the number of nodes is not a power of two, might not be feasible in many practical applications.
+### **Parent and Child Nodes**
+- **Parent Node:** A node that has one or more nodes connected to it below
+- **Child Nodes:** Nodes directly connected below a parent node
+- In a binary tree, a parent can have **zero, one, or two children**—one on the left and/or one on the right
 
+### **Leaf Nodes**
+- Nodes that do **not have any children**
+- Located at the **outermost ends** of tree branches
+- Terminal points of any tree traversal
+- Also called **terminal nodes**
 
-Balanced Binary Tree: A type of Binary Tree where the heights of the two subtrees of any node differ by at most one. This property ensures that the tree remains relatively well-balanced, preventing the tree from becoming highly skewed or degenerate.
-In a balanced binary tree, the height of the tree should be log2N at maximum, where N is the number of nodes. This ensures that the tree does not become heavily skewed or imbalanced. The distribution of nodes of both the left and right subtrees remains relatively even throughout the tree.
+### **Ancestors**
+- Nodes that lie on the path from a particular node **up to the root**
+- Encountered while moving **upwards** through parent nodes
+- A node's ancestors include its parent, grandparent, great-grandparent, etc.
 
-Degenerate Tree: A Binary Tree where the nodes are arranged in a single path leaning to the right or left. The tree resembles a linked list in its structure where each node points to the next node in a linear fashion.
-Each level of this tree only has one node. The height of the tree reaches ‘n’, i.e., the number of nodes in the tree, resulting in inefficient search operations. Though degenerate trees are not commonly used intentionally due to their inefficient nature for most operations, they may occur inadvertently in scenarios where nodes are inserted in a specific order (e.g., always to the right or left), causing the tree to lose its balanced properties.
-Understanding degenerate trees is essential in analysing the worst-case time complexity of algorithms in scenarios where the tree structure degrades to this linear form, as it can help in optimising algorithms for these situations.
+### **Subtree**
+- A tree formed by a node and all its descendants
+- Each child of a node is the root of its own subtree
+
+---
+
+## Binary Tree Visualization
+
+```
+        1 (Root)
+       / \
+      2   3
+     / \   \
+    4   5   6 (Leaf nodes)
+```
+
+---
+
+## Types of Binary Trees
+
+### **1. Full Binary Tree** (Strict Binary Tree)
+
+**Definition:** Every node has either **zero or two children**. No node has just a single child; all internal nodes have exactly two children or no children at all.
+
+```
+     1
+    / \
+   2   3
+  / \
+ 4   5
+```
+
+**Properties:**
+- Every internal node has exactly 2 children
+- All leaf nodes are at the same or different levels
+- More predictable and balanced structure
+- If a tree has `n` internal nodes, it has `n + 1` leaf nodes
+- Total nodes: `2n + 1` (where n = internal nodes)
+
+**Use Cases:**
+- Expression trees (for parsing mathematical expressions)
+- Huffman coding trees
+- Optimal searching structures
+
+---
+
+### **2. Complete Binary Tree**
+
+**Definition:** All levels are **completely filled** except possibly the last level, which is **filled from left to right**.
+
+```
+     1
+    / \
+   2   3
+  / \ /
+ 4  5 6
+```
+
+**Properties:**
+- All levels except the last are fully populated
+- Last level is filled from **left to right**
+- Perfect shape for implementing **heaps**
+- Height is always `log₂(n)` where n is number of nodes
+- Efficient for array representation
+
+**Use Cases:**
+- **Heap implementation** (Min-heap, Max-heap)
+- Priority queues
+- Binary indexed trees
+
+**Difference from Full Binary Tree:**
+- Complete binary trees don't require all nodes to have 2 children
+- Focus is on positioning and filling order, not node relationships
+
+---
+
+### **3. Perfect Binary Tree**
+
+**Definition:** All leaf nodes are at the **same level** and every node has either **zero or two children**. All levels are completely filled.
+
+```
+       1
+      / \
+     2   3
+    / \ / \
+   4  5 6  7
+```
+
+**Properties:**
+- All levels are fully filled with nodes
+- All leaf nodes at the same depth/level
+- Maximum nodes for its height
+- Number of nodes: `2^(h+1) - 1` (where h = height)
+- Number of leaf nodes: `2^h`
+- Height: `log₂(n+1) - 1`
+- Maximizes node count for given height
+
+**Advantages:**
+- Efficient searching and sorting due to balanced nature
+- Predictable structure
+
+**Challenges:**
+- Difficult to maintain in practice
+- Rare in real-world applications
+
+---
+
+### **4. Balanced Binary Tree** (AVL Tree, Red-Black Tree)
+
+**Definition:** The heights of the **left and right subtrees** of any node differ by **at most 1**. This ensures the tree remains relatively well-balanced.
+
+```
+       1 (height diff: |1-1| = 0)
+      / \
+     2   3
+    /
+   4
+```
+
+**Properties:**
+- Prevents tree from becoming skewed
+- Maximum height: `log₂(n)` where n = number of nodes
+- Time complexity for search, insert, delete: **O(log n)**
+- Self-balancing property maintained through rotations
+
+**Balance Factor:**
+```
+Balance Factor = Height(Left Subtree) - Height(Right Subtree)
+Valid range: -1, 0, or +1
+```
+
+**Use Cases:**
+- AVL Trees
+- Red-Black Trees
+- Database indexing
+
+**Java Example:**
+```java
+class AVLNode {
+    int data;
+    AVLNode left, right;
+    int height;
+    
+    AVLNode(int data) {
+        this.data = data;
+        this.height = 1;
+    }
+}
+```
+
+---
+
+### **5. Degenerate Tree** (Skewed Tree)
+
+**Definition:** Nodes are arranged in a **single linear path**, leaning entirely to one side (left or right). Resembles a **linked list** structure.
+
+```
+Degenerate Left Tree    Degenerate Right Tree
+    1                          1
+   /                            \
+  2                              2
+ /                                \
+3                                  3
+```
+
+**Properties:**
+- Each level has only **one node**
+- Height equals number of nodes: `h = n`
+- Completely unbalanced structure
+- Forms either a left-skewed or right-skewed tree
+
+**Problems:**
+- Search, insert, delete operations become **O(n)** - linear time
+- Essentially behaves like a linked list
+- Very inefficient for tree operations
+
+**Why Study Degenerate Trees?**
+- Understanding **worst-case scenarios** for tree algorithms
+- Essential for analyzing time complexity degradation
+- Motivation for balanced tree structures (AVL, Red-Black)
+
+---
+
+## Comparison Table
+
+| Property | Full | Complete | Perfect | Balanced | Degenerate |
+|----------|------|----------|---------|----------|-----------|
+| All internal nodes have 2 children | ✓ | ✗ | ✓ | ✗ | ✗ |
+| Last level completely filled | ✗ | ✗ | ✓ | ✗ | ✗ |
+| Last level filled left to right | ✓ | ✓ | ✓ | ✗ | ✗ |
+| Height | O(log n) | O(log n) | O(log n) | O(log n) | O(n) |
+| Search time | O(n) | O(n) | O(n) | O(log n) | O(n) |
+
+---
+
+## Basic Tree Operations (Java)
+
+### **Tree Creation and Traversal**
+
+```java
+class BinaryTree {
+    TreeNode root;
+    
+    // In-order Traversal: Left -> Root -> Right
+    void inOrder(TreeNode node) {
+        if (node == null) return;
+        inOrder(node.left);
+        System.out.print(node.data + " ");
+        inOrder(node.right);
+    }
+    
+    // Pre-order Traversal: Root -> Left -> Right
+    void preOrder(TreeNode node) {
+        if (node == null) return;
+        System.out.print(node.data + " ");
+        preOrder(node.left);
+        preOrder(node.right);
+    }
+    
+    // Post-order Traversal: Left -> Right -> Root
+    void postOrder(TreeNode node) {
+        if (node == null) return;
+        postOrder(node.left);
+        postOrder(node.right);
+        System.out.print(node.data + " ");
+    }
+    
+    // Calculate height
+    int height(TreeNode node) {
+        if (node == null) return 0;
+        return 1 + Math.max(height(node.left), height(node.right));
+    }
+    
+    // Count total nodes
+    int countNodes(TreeNode node) {
+        if (node == null) return 0;
+        return 1 + countNodes(node.left) + countNodes(node.right);
+    }
+}
+```
+
+---
+
+## Key Takeaways
+
+1. **Binary trees** provide hierarchical data organization unlike linear structures
+2. **Node relationships** (parent, child, leaf, ancestor) define tree structure
+3. **Tree types** vary based on node distribution and balance:
+   - **Full trees:** All nodes have 0 or 2 children
+   - **Complete trees:** Perfect for heap implementation
+   - **Perfect trees:** Optimal but rarely maintained
+   - **Balanced trees:** Best for search operations
+   - **Degenerate trees:** Worst case - avoid!
+4. **Tree operations** (search, insert, delete) depend heavily on tree balance
+5. **Balanced trees** provide O(log n) performance for common operations
+
+---
+
+## Next Steps
+
+- Explore **Binary Search Trees (BST)** for efficient searching
+- Learn **AVL Trees** and **Red-Black Trees** for self-balancing structures
+- Study **Tree Traversal Techniques** (DFS, BFS)
+- Understand **Heaps** and their applications in priority queues
