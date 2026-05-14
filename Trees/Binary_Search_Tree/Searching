@@ -1,0 +1,9 @@
+How to search a value in Binary Search Tree:
+Let's say we want to search for the number key, We start at the root. Then:
+
+1. We compare the value to be searched with the value of the root. 
+2. If it's equal we are done with the search.
+3. If it's smaller we know that we need to go to the left subtree.
+4. If it's greater we search in the right subtree. 
+5. Repeat the above step till no more traversal is possible
+6. If at any iteration, key is found, return True. If the node is null, return False.
