@@ -1,0 +1,147 @@
+Deleting a node in a BST means removing the target node while ensuring that the tree remains a valid BST. Depending on the structure of the node to be deleted, there are three possible scenarios:
+
+Case 1: Node has No Children (Leaf Node)
+If the target node is a leaf node, it can be directly removed from the tree since it has no child to maintain.
+
+Case 2: Node has One Child(Left or Right Child)
+If the target node has only one child, we remove the node and connect its parent directly to its only child. This way, the tree remains valid after deletion of target node.
+
+Case 3: Node has Two Children
+If the target node has two children, deletion is slightly more complex.
+
+To maintain the BST property, we need to find a replacement node for the target. The replacement can be either:
+
+The inorder successor — the smallest value in the right subtree, which is the next greater value than the target node.
+The inorder predecessor — the largest value in the left subtree, which is the next smaller value than the target node.
+Once the replacement node is chosen, we replace the target node’s value with that node’s value, and then delete the replacement node, which will now fall under Case 1 (no children) or Case 2 (one child).
+
+Note: Inorder predecessor can also be used.
+
+The deletion process in BST depends on the number of children of the node.
+
+No children means simply remove the node.
+One child means remove the node and connect its parent to the node’s only child.
+Two children means replace the node with its inorder successor/predecessor and delete that node.
+This ensures that the BST property remains intact after every deletion.
+
+Example Problem :
+
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+// Node structure
+class Node {
+    int data;
+    Node left, right;
+
+    public Node(int item) {
+        data = item;
+        left = right = null;
+    }
+}
+
+class GfG {
+    
+    // Calculate Height
+ static int getHeight( Node root, int h ) {
+        if( root == null ) return h-1;
+        
+        return Math.max(getHeight(root.left, h+1), getHeight(root.right, h+1));
+    }
+    
+    // Print Level Order
+     static void levelOrder(Node root) {
+        Queue<List<Object>> queue = new LinkedList<>();
+        queue.offer(List.of(root, 0));
+        
+        int lastLevel = 0;
+        
+        // function to get the height of tree
+        int height = getHeight(root, 0);
+        
+        // printing the level order of tree
+        while( !queue.isEmpty()) {
+            List<Object> top = queue.poll();
+            
+            Node node = (Node) top.get(0);
+            int lvl = (int) top.get(1);
+            
+            if( lvl > lastLevel ) {
+                System.out.println();
+                lastLevel = lvl;
+            }
+            
+            // all levels are printed
+            if( lvl > height ) break;
+            
+            // printing null node
+            System.out.print((node.data == -1 ? "N" : node.data) + " ");
+            
+            // null node has no children
+            if( node.data == -1 ) continue;
+            
+            if( node.left == null ) queue.offer(List.of(new Node(-1), lvl+1));
+            else queue.offer(List.of(node.left, lvl+1));
+            
+            if( node.right == null ) queue.offer(List.of(new Node(-1), lvl+1));
+            else queue.offer(List.of(node.right, lvl+1));
+        }
+    }
+    
+//Driver Code Ends
+     // Get inorder successor (smallest in right subtree)
+    static Node getSuccessor(Node curr) {
+        curr = curr.right;
+        while (curr != null && curr.left != null) {
+            curr = curr.left;
+        }
+        return curr;
+    }
+    
+    // Delete a node with value x from BST
+    static Node delNode(Node root, int x) {
+        if (root == null) return root;
+
+        if (root.data > x) {
+            root.left = delNode(root.left, x);
+        } else if (root.data < x) {
+            root.right = delNode(root.right, x);
+        } else {
+            // Node with 0 or 1 child
+            if (root.left == null) return root.right;
+            if (root.right == null) return root.left;
+
+            // Node with 2 children
+            Node succ = getSuccessor(root);
+            root.data = succ.data;
+            root.right = delNode(root.right, succ.data);
+        }
+        return root;
+    }
+
+//Driver Code Starts
+    public static void main(String[] args) {
+        Node root = new Node(10);
+        root.left = new Node(5);
+        root.right = new Node(15);
+        root.right.left = new Node(12);
+        root.right.right = new Node(18);
+
+        int x = 15;
+        root = delNode(root, x);
+
+        levelOrder(root);
+    }
+}
+
+Output:
+10 
+5 18 
+N N 12 N 
+
+Time Complexity: O(h), where h is the height of the BST. 
+Auxiliary Space: O(h).
