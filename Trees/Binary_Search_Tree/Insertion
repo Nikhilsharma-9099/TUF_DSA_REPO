@@ -1,0 +1,116 @@
+Given the root of a Binary Search Tree, we need to insert a new node with given value in the BST. All the nodes have distinct values in the BST and we may assume that the the new value to be inserted is not present in BST.
+
+A new key is inserted at the position that maintains the BST property. We start from the root and move downward: if the key is smaller, go left; if larger, go right. We continue until we find an unoccupied spot where the node can be placed without violating the BST property, and insert it there as a new leaf.
+
+// Insertion in Binary Search Tree using Recursion:
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.List;
+import java.util.ArrayList;
+
+// Node structure
+class Node {
+    int data;
+    Node left, right;
+
+    public Node(int val) {
+        data = val;
+        left = right = null;
+    }
+}
+
+class GFG {
+    static int getHeight( Node root, int h ) {
+        if( root == null ) return h-1;
+        
+        return Math.max(getHeight(root.left, h+1), getHeight(root.right, h+1));
+    }
+    
+    static void levelOrder(Node root) {
+        Queue<List<Object>> queue = new LinkedList<>();
+        queue.offer(List.of(root, 0));
+        
+        int lastLevel = 0;
+        
+        // function to get the height of tree
+        int height = getHeight(root, 0);
+        
+        // printing the level order of tree
+        while( !queue.isEmpty()) {
+            List<Object> top = queue.poll();
+            
+            Node node = (Node) top.get(0);
+            int lvl = (int) top.get(1);
+            
+            if( lvl > lastLevel ) {
+                System.out.println();
+                lastLevel = lvl;
+            }
+            
+            // all levels are printed
+            if( lvl > height ) break;
+            
+            // printing null node
+            System.out.print((node.data == -1 ? "N" : node.data) + " ");
+            
+            // null node has no children
+            if( node.data == -1 ) continue;
+            
+            if( node.left == null ) queue.offer(List.of(new Node(-1), lvl+1));
+            else queue.offer(List.of(node.left, lvl+1));
+            
+            if( node.right == null ) queue.offer(List.of(new Node(-1), lvl+1));
+            else queue.offer(List.of(node.right, lvl+1));
+        }
+    }
+    
+    static Node insert(Node root, int key) {
+
+        // If the tree is empty, return a new node
+        if (root == null)
+            return new Node(key);
+
+        // Otherwise, recur down the tree
+        if (key < root.data)
+            root.left = insert(root.left, key);
+        else
+            root.right = insert(root.right, key);
+
+        // Return the (unchanged) node pointer
+        return root;
+    }
+
+    public static void main(String[] args) {
+        Node root = null;
+
+        // Create BST
+        //       22
+        //      /  \
+        //     12   30
+        //     / \   
+        //    8  20
+        //       / \
+        //      15  30
+
+        root = insert(root, 22);
+        root = insert(root, 12);
+        root = insert(root, 30);
+        root = insert(root, 8);
+        root = insert(root, 20);
+        root = insert(root, 30);
+        root = insert(root, 15);
+
+        // print the level order 
+        // traversal of the BST
+        levelOrder(root);
+    }
+}
+
+Output:
+22 
+12 30 
+8 20 N 30 
+N N 15 N N N 
+
+Time Complexity: O(h)
+Auxiliary Space: O(h), due to recursive stack.
